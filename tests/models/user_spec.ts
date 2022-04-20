@@ -1,4 +1,4 @@
-import { UserStore } from '../src/models/user';
+import { UserStore } from '../../src/models/user';
 
 process.env.ENV='test';
 
@@ -9,7 +9,7 @@ describe('User Model', () => {
     expect(store.index).toBeDefined();
   });
 
-  it('index method should return a list of users', async () => {
+  it('index method should return an empty list of users', async () => {
     const result = await store.index();
     expect(result).toEqual([]);
   });
@@ -32,15 +32,16 @@ describe('User Model', () => {
 
   it('create method should add a user', async () => {
     const result = await store.create({
+      id:1,
       firstname: 'Maggie',
       lastname: 'Amin',
-      password: 'D440AED189A13FF970DAC7E7E8F987B2',
+      password: 'secret-password-hash',
     });
     expect(result).toEqual({
       id: 1,
       firstname: 'Maggie',
       lastname: 'Amin',
-      password: 'D440AED189A13FF970DAC7E7E8F987B2',
+      password: 'secret-password-hash',
     });
   });
 
@@ -50,7 +51,7 @@ describe('User Model', () => {
       id: 1 ,
       firstname: 'Maggie',
       lastname: 'Amin' ,
-      password: 'D440AED189A13FF970DAC7E7E8F987B2' ,
+      password: 'secret-password-hash' ,
     }]);
  });
 
@@ -60,7 +61,7 @@ describe('User Model', () => {
     id: 1,
     firstname: 'Maggie',
     lastname: 'Amin' ,
-    password: 'D440AED189A13FF970DAC7E7E8F987B2' ,
+    password: 'secret-password-hash' ,
     });
   });
 

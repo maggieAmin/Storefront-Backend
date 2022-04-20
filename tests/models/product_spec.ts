@@ -1,4 +1,4 @@
-import { ProductStore } from '../src/models/product';
+import { ProductStore } from '../../src/models/product';
 
 const store = new ProductStore();
 
@@ -30,6 +30,7 @@ describe('Product Model', () => {
 
   it('create method should add a product', async () => {
     const result = await store.create({
+      id:1,
       name: 'dress',
       price: 100,
     });
