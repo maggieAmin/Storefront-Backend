@@ -2,9 +2,9 @@
 import Client from '../database';
 
 export type OrderProduct = {
-  id?: number;
-  name: string;
-  price: number;
+  order_id: number;
+  product_id: number;
+  quantity: number;
 };
 
 export class OrderProductStore {
@@ -21,45 +21,69 @@ export class OrderProductStore {
     }
   }
 
-  async show(id: string): Promise<OrderProduct> {
+  async show(order_id: number): Promise<OrderProduct> {
     try {
-      const sql = 'SELECT * FROM orderProducts WHERE id=($1)';
+      const sql = 'SELECT * FROM orderProducts WHERE order_id=($1)';
       // @ts-ignore
       const conn = await Client.connect();
-      const result = await conn.query(sql, [id]);
+      const result = await conn.query(sql, [order_id]);
       conn.release();
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Could not find orderProduct ${id}. Error: ${err}`);
+      throw new Error(`Could not find orderProduct ${order_id}. Error: ${err}`);
     }
   }
 
   async create(b: OrderProduct): Promise<OrderProduct> {
     try {
       const sql =
-        'INSERT INTO orderProducts (name, price) VALUES($1, $2, $3, $4) RETURNING *';
+        'INSERT INTO orderProducts (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
-      const result = await conn.query(sql, [b.name, b.price]);
+      const result = await conn.query(sql, [
+        b.order_id,
+        b.product_id,
+        b.quantity,
+      ]);
       const orderProduct = result.rows[0];
       conn.release();
       return orderProduct;
     } catch (err) {
-      throw new Error(`Could not add new orderProduct ${name}. Error: ${err}`);
+      throw new Error(`Could not add new orderProduct. Error: ${err}`);
     }
   }
 
-  async delete(id: string): Promise<OrderProduct> {
+  async update(b: OrderProduct): Promise<OrderProduct> {
     try {
-      const sql = 'DELETE FROM orderProducts WHERE id=($1)';
+      const sql =
+        'UPDATE orderproducts SET order_id=$1, product_id=$2, quantity=$3 WHERE order_id=$1 AND product_id=$2';
       // @ts-ignore
       const conn = await Client.connect();
-      const result = await conn.query(sql, [id]);
+      const result = await conn.query(sql, [
+        b.order_id,
+        b.product_id,
+        b.quantity,
+      ]);
+      const order = result.rows[0];
+      conn.release();
+      return order;
+    } catch (err) {
+      throw new Error(`Could not add new order. Error: ${err}`);
+    }
+  }
+
+  async delete(order_id: number, product_id: number): Promise<OrderProduct> {
+    try {
+      const sql =
+        'DELETE FROM orderProducts WHERE order_id=$1 AND product_id=$2';
+      // @ts-ignore
+      const conn = await Client.connect();
+      const result = await conn.query(sql, [order_id, product_id]);
       const orderProduct = result.rows[0];
       conn.release();
       return orderProduct;
     } catch (err) {
-      throw new Error(`Could not delete orderProduct ${id}. Error: ${err}`);
+      throw new Error(`Could not delete orderProduct. Error: ${err}`);
     }
   }
 }

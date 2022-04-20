@@ -9,7 +9,7 @@
     "prettier": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "build": "npm run prettier && npm run lint && npx tsc",
     "jasmine": "jasmine",
-    "test": "ENV=test db-migrate --env test up && npm run jasmine && db-migrate db:drop test",
+    "test": "set ENV=test&& db-migrate --env test reset && db-migrate --env test up && npm run build && ENV=test jasmine",
     "start": "nodemon src/index.ts"
   },
   "author": "Maggie Amin 😎",

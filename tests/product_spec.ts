@@ -17,15 +17,15 @@ describe('Product Model', () => {
   });
 
   it('should have a create method', () => {
-    expect(store.index).toBeDefined();
+    expect(store.create).toBeDefined();
   });
 
   it('should have a update method', () => {
-    expect(store.index).toBeDefined();
+    expect(store.update).toBeDefined();
   });
 
   it('should have a delete method', () => {
-    expect(store.index).toBeDefined();
+    expect(store.delete).toBeDefined();
   });
 
   it('create method should add a product', async () => {
@@ -36,7 +36,7 @@ describe('Product Model', () => {
     expect(result).toEqual({
       id: 1,
       name: 'dress',
-      price: 100 ,
+      price: '100' ,
     });
   });
 
@@ -45,7 +45,7 @@ describe('Product Model', () => {
     expect(result).toEqual([{
       id: 1 ,
       name: 'dress',
-      price: 100 ,
+      price: '100' ,
     }]);
  });
 
@@ -54,12 +54,12 @@ describe('Product Model', () => {
   expect(result).toEqual({
     id: 1,
     name: 'dress' ,
-    price: 100 ,
+    price: '100' ,
     });
   });
 
   it('delete method should remove the product', async () => {
-    store.delete("1");
+    await store.delete(1);
     const result = await store.index()
 
     expect(result).toEqual([]);

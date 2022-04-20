@@ -3,8 +3,8 @@ import Client from '../database';
 
 export type User = {
   id?: number;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   password: string;
 };
 
@@ -37,26 +37,50 @@ export class UserStore {
 
   async create(b: User): Promise<User> {
     try {
+      // @ts-ignore
+      const conn = await Client.connect();
+      let sql, params;
+      if (b.id) {
+        sql =
+          'INSERT INTO users (id, firstName, lastName, password) VALUES($1, $2, $3, $4) RETURNING *';
+        params = [b.id, b.firstname, b.lastname, b.password];
+      } else {
+        sql =
+          'INSERT INTO users (firstName, lastName, password) VALUES($1, $2, $3) RETURNING *';
+        params = [b.firstname, b.lastname, b.password];
+      }
+      const result = await conn.query(sql, params);
+      const user = result.rows[0];
+      conn.release();
+      return user;
+    } catch (err) {
+      throw new Error(`Could not add new user. Error: ${err}`);
+    }
+  }
+
+  async update(b: User): Promise<User> {
+    try {
       const sql =
-        'INSERT INTO users (name, price) VALUES($1, $2, $3, $4) RETURNING *';
+        'UPDATE users SET id=$1, firstName="$2", lastName="$3", password="$4" WHERE id=$1';
       // @ts-ignore
       const conn = await Client.connect();
       const result = await conn.query(sql, [
-        b.firstName,
-        b.lastName,
+        b.id,
+        b.firstname,
+        b.lastname,
         b.password,
       ]);
       const user = result.rows[0];
       conn.release();
       return user;
     } catch (err) {
-      throw new Error(`Could not add new user ${name}. Error: ${err}`);
+      throw new Error(`Could not add new order. Error: ${err}`);
     }
   }
 
-  async delete(id: string): Promise<User> {
+  async delete(id: number): Promise<User> {
     try {
-      const sql = 'DELETE FROM users WHERE id=($1)';
+      const sql = 'DELETE FROM users WHERE id=$1';
       // @ts-ignore
       const conn = await Client.connect();
       const result = await conn.query(sql, [id]);
