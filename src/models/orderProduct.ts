@@ -21,14 +21,14 @@ export class OrderProductStore {
     }
   }
 
-  async show(order_id: number): Promise<OrderProduct> {
+  async show(order_id: number): Promise<OrderProduct[]> {
     try {
       const sql = 'SELECT * FROM orderProducts WHERE order_id=($1)';
       // @ts-ignore
       const conn = await Client.connect();
       const result = await conn.query(sql, [order_id]);
       conn.release();
-      return result.rows[0];
+      return result.rows;
     } catch (err) {
       throw new Error(`Could not find orderProduct ${order_id}. Error: ${err}`);
     }

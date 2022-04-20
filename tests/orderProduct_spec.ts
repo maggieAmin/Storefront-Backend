@@ -76,11 +76,11 @@ describe('OrderProduct Model', () => {
 
  it('show method should return the correct orderProduct', async () => {
   const result = await store.show(1);
-  expect(result).toEqual({
+  expect(result).toEqual([{
       order_id: 1,
       product_id: 1,
       quantity:5
-    });
+    }]);
   });
 
   it('delete method should remove the orderProduct', async () => {
