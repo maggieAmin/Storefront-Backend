@@ -1,5 +1,9 @@
 import express, { Request, Response } from 'express';
 import { User, UserStore } from '../models/user';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const userStore = new UserStore();
 
@@ -16,7 +20,7 @@ const show = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-  console.log('Request to add user');
+  console.log('Request to add user', req.body);
   try {
     const user: User = {
       firstname: req.body.firstname,
@@ -32,8 +36,11 @@ const create = async (req: Request, res: Response) => {
 };
 
 const userPasswordHash = (password: string) => {
-  // TODO
-  return password;
+    const saltRounds:number = parseInt(process.env.SALT_ROUNDS+"");
+    const pepper = password+process.env.BCRYPT_PASSWORD;
+  const hash = bcrypt.hashSync(pepper, saltRounds);
+  console.log("Password hash", hash);
+  return hash;
 };
 
 const userRoutes = (app: express.Application) => {

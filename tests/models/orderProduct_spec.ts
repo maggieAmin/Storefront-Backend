@@ -1,7 +1,7 @@
-import { OrderStore } from '../src/models/order';
-import { OrderProductStore } from '../src/models/orderProduct';
-import { ProductStore } from '../src/models/product';
-import { UserStore } from '../src/models/user';
+import { OrderStore } from '../../src/models/order';
+import { OrderProductStore } from '../../src/models/orderProduct';
+import { ProductStore } from '../../src/models/product';
+import { UserStore } from '../../src/models/user';
 
 process.env.ENV='test';
 

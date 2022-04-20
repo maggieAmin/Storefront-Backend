@@ -1,5 +1,5 @@
-import { OrderStore } from '../src/models/order';
-import { UserStore } from '../src/models/user';
+import { OrderStore } from '../../src/models/order';
+import { UserStore } from '../../src/models/user';
 
 const store = new OrderStore();
 const userStore = new UserStore();
