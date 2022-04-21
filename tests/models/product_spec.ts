@@ -31,12 +31,12 @@ describe('Product Model', () => {
   it('create method should add a product', async () => {
     const result = await store.create({
       id:1,
-      name: 'dress',
+      name: 'Dress',
       price: 100,
     });
     expect(result).toEqual({
       id: 1,
-      name: 'dress',
+      name: 'Dress',
       price: '100' ,
     });
   });
@@ -45,7 +45,7 @@ describe('Product Model', () => {
     const result = await store.index();
     expect(result).toEqual([{
       id: 1 ,
-      name: 'dress',
+      name: 'Dress',
       price: '100' ,
     }]);
  });
@@ -54,7 +54,7 @@ describe('Product Model', () => {
   const result = await store.show("1");
   expect(result).toEqual({
     id: 1,
-    name: 'dress' ,
+    name: 'Dress' ,
     price: '100' ,
     });
   });

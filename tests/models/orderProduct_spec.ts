@@ -38,29 +38,29 @@ describe('OrderProduct Model', () => {
 
   it('create method should add a orderProduct', async () => {
     const user = await userStore.create({
-        id:1,
+        id:5,
         firstname: "Maggie",
         lastname: "Amin",
         password: "D440AED189A13FF970DAC7E7E8F987B2"
     });
     const product = await productStore.create({
-        id:1,
-        name: "dress",
+        id:3,
+        name: "jacket",
         price:100
     });
     const order = await orderStore.create({
         id:1,
-        user_id: 1,
+        user_id: 5,
         status_of_order: "ACTIVE",
     });
     const result = await store.create({
       order_id: 1,
-      product_id: 1,
+      product_id: 3,
       quantity:5
     });
     expect(result).toEqual({
         order_id: 1,
-        product_id: 1,
+        product_id: 3,
         quantity:5
     });
   });
@@ -69,7 +69,7 @@ describe('OrderProduct Model', () => {
     const result = await store.index();
     expect(result).toEqual([{
         order_id: 1,
-        product_id: 1,
+        product_id: 3,
         quantity:5
     }]);
  });
@@ -78,18 +78,18 @@ describe('OrderProduct Model', () => {
   const result = await store.show(1);
   expect(result).toEqual([{
       order_id: 1,
-      product_id: 1,
+      product_id: 3,
       quantity:5
     }]);
   });
 
   it('delete method should remove the orderProduct', async () => {
-    await store.delete(1,1);
+    await store.delete(1,3);
     const result = await store.index()
 
     expect(result).toEqual([]);
     await orderStore.delete(1);
-    await productStore.delete(1);
-    await userStore.delete(1);
+    await productStore.delete(3);
+    await userStore.delete(5);
   });
 });

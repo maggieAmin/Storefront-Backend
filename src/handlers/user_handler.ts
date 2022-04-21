@@ -39,7 +39,7 @@ const userPasswordHash = (password: string) => {
   const saltRounds: number = parseInt(process.env.SALT_ROUNDS + '');
   const pepper = password + process.env.BCRYPT_PASSWORD;
   const hash = bcrypt.hashSync(pepper, saltRounds);
-  console.log('Password hash', hash);
+  console.log('Salt', saltRounds, 'pepper', pepper, 'Password hash', hash);
   return hash;
 };
 
