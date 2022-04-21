@@ -20,7 +20,7 @@ const show = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-  console.log('Request to add user', req.body);
+  console.log('Request to add user');
   try {
     const user: User = {
       firstname: req.body.firstname,
