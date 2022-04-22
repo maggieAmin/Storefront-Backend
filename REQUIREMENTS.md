@@ -8,13 +8,16 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Index -> `GET /products/`
 - Show (args: product id) -> `GET /products/:id`
 - Create (args: Product)[token required] -> `POST /products/` **required**: JWToken: (user role:admin)
+- Post authentication 
 - [OPTIONAL] Top 5 most popular products 
 - [OPTIONAL] Products by category (args: product category)
+
 
 #### Users
 - Index [token required] -> `GET /users/` **required**: JWToken
 - Show (args: id)[token required] -> `GET /users/:id` **required**: JWToken
 - Create (args: User)[token required] -> `POST /users/` **required**: JWToken
+- **New** Login (args: user_id, password) -> `POST /users/login`
 
 #### Orders
 - Current Order by user (args: user id)[token required] -> `GET /orders/:user_id` **required**: JWToken
