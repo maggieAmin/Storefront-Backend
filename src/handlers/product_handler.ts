@@ -1,5 +1,6 @@
 import { Product, ProductStore } from '../models/product';
 import express, { Request, Response } from 'express';
+import { verifyToken } from '../helpers/jwt-helper';
 
 const productStore = new ProductStore();
 
@@ -17,6 +18,11 @@ const show = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
   console.log('Request to add product');
+  if (!verifyToken(req.body.token)) {
+    res.status(401);
+    res.json('JWT Token missing');
+    return;
+  }
   try {
     const product: Product = {
       name: req.body.name,

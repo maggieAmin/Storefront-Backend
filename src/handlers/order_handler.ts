@@ -1,6 +1,7 @@
 import { OrderStore } from '../models/order';
 import express, { Request, Response } from 'express';
 import { OrderProductStore } from '../models/orderProduct';
+import { verifyToken } from '../helpers/jwt-helper';
 
 const orderStore = new OrderStore();
 const orderProductStore = new OrderProductStore();
@@ -18,6 +19,11 @@ type FullOrder = {
 };
 
 const userOrders = async (req: Request, res: Response) => {
+  if (!verifyToken(req.body.token)) {
+    res.status(401);
+    res.json('JWT Token missing');
+    return;
+  }
   const reqUserId = parseInt(req.params.user_id);
   console.log('Request orders for user:', reqUserId);
   const allOrrders = await orderStore.index();

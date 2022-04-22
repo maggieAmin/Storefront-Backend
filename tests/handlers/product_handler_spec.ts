@@ -1,4 +1,5 @@
 import supertest from "supertest";
+import { generateToken } from "../../src/helpers/jwt-helper";
 import app from '../../src/index'
 import { ProductStore } from "../../src/models/product";
 
@@ -14,14 +15,24 @@ describe('Product Handler', () => {
         done();
     });
     it('should POST product', async(done) => {
+        const token = generateToken("20");
         const response = await request.post('/products/').send({
             "name": "Jeans",
-            "price": 50
+            "price": 50,
+            "token": token
         });
         expect(response.status).toBe(200);
         expect(response.body.name).toEqual("Jeans");
         expect(response.body.price).toEqual("50");
         await productStore.delete(response.body.id);
+        done();
+    });
+    it('should NOT POST product if token is missing', async(done) => {
+        const response = await request.post('/products/').send({
+            "name": "Jeans",
+            "price": 50,
+        });
+        expect(response.status).toBe(401);
         done();
     });
 

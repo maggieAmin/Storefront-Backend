@@ -1,4 +1,5 @@
 import supertest from "supertest";
+import { generateToken } from "../../src/helpers/jwt-helper";
 import app from '../../src/index'
 import { OrderStore } from "../../src/models/order";
 import { OrderProductStore } from "../../src/models/orderProduct";
@@ -49,8 +50,9 @@ describe('Order Handler', () => {
             product_id: 5,
             quantity: 2
         });
+        const token = generateToken("20");
 
-        const response = await request.get('/orders/8');
+        const response = await request.get('/orders/8').send({token:token});
         expect(response.status).toBe(200);
         expect(response.body[0].id).toEqual(7);
         expect(response.body[0].user_id).toEqual(8);
