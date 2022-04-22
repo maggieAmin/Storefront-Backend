@@ -16,13 +16,13 @@ describe('User Handler', () => {
     it('should POST user', async(done) => {
         const response = await request.post('/users/').send({
             "id": 20,
-            "firstname": "John",
-            "lastname": "Matta",
+            "firstname": "Captain",
+            "lastname": "America",
             "password": "password456"
         });
         expect(response.status).toBe(200);
-        expect(response.body.firstname).toEqual("John");
-        expect(response.body.lastname).toEqual("Matta");
+        expect(response.body.firstname).toEqual("Captain");
+        expect(response.body.lastname).toEqual("America");
         expect(response.body.password).not.toEqual("password456");
         await userStore.delete(response.body.id);
         done();
@@ -31,15 +31,15 @@ describe('User Handler', () => {
     it('should SHOW user with id', async(done) => {
         const user = await userStore.create ({
             id:20,
-            firstname: "John",
-            lastname: "Matta",
-            password: "$2b$06$2kD8iAFGxI.pM544Jb9CfOesjz.BIdq8DFHW2.Xy6obgVuax6.rSu"
+            firstname: "Captain",
+            lastname: "America",
+            password: "password456"
         })
         const response = await request.get('/users/20');
         expect(response.status).toBe(200);
-        expect(response.body.firstname).toEqual("John");
-        expect(response.body.lastname).toEqual("Matta");
-        expect(response.body.password).toEqual("$2b$06$2kD8iAFGxI.pM544Jb9CfOesjz.BIdq8DFHW2.Xy6obgVuax6.rSu");
+        expect(response.body.firstname).toEqual("Captain");
+        expect(response.body.lastname).toEqual("America");
+        expect(response.body.password).not.toEqual("password456");
         await userStore.delete(20);
         done();
     });

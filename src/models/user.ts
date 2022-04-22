@@ -1,5 +1,6 @@
 // @ts-ignore
 import Client from '../database';
+import bcrypt from 'bcrypt';
 
 export type User = {
   id?: number;
@@ -40,14 +41,15 @@ export class UserStore {
       // @ts-ignore
       const conn = await Client.connect();
       let sql, params;
+      const password = userPasswordHash(b.password);
       if (b.id) {
         sql =
           'INSERT INTO users (id, firstName, lastName, password) VALUES($1, $2, $3, $4) RETURNING *';
-        params = [b.id, b.firstname, b.lastname, b.password];
+        params = [b.id, b.firstname, b.lastname, password];
       } else {
         sql =
           'INSERT INTO users (firstName, lastName, password) VALUES($1, $2, $3) RETURNING *';
-        params = [b.firstname, b.lastname, b.password];
+        params = [b.firstname, b.lastname, password];
       }
       const result = await conn.query(sql, params);
       const user = result.rows[0];
@@ -60,6 +62,7 @@ export class UserStore {
 
   async update(b: User): Promise<User> {
     try {
+      const password = userPasswordHash(b.password);
       const sql =
         'UPDATE users SET id=$1, firstName="$2", lastName="$3", password="$4" WHERE id=$1';
       // @ts-ignore
@@ -68,7 +71,7 @@ export class UserStore {
         b.id,
         b.firstname,
         b.lastname,
-        b.password,
+        password,
       ]);
       const user = result.rows[0];
       conn.release();
@@ -91,4 +94,33 @@ export class UserStore {
       throw new Error(`Could not delete user ${id}. Error: ${err}`);
     }
   }
+
+  async authenticate(username: string, password: string): Promise<User | null> {
+    // @ts-ignore
+    const conn = await Client.connect();
+    const sql = 'SELECT password_digest FROM users WHERE username=($1)';
+
+    const result = await conn.query(sql, [username]);
+    const pepper = process.env.BCRYPT_PASSWORD;
+
+    if (result.rows.length) {
+      const user = result.rows[0];
+
+      console.log(user);
+
+      if (bcrypt.compareSync(password + pepper, user.password_digest)) {
+        return user;
+      }
+    }
+
+    return null;
+  }
 }
+
+const userPasswordHash = (password: string) => {
+  const saltRounds: number = parseInt(process.env.SALT_ROUNDS + '');
+  const pepper = password + process.env.BCRYPT_PASSWORD;
+  const hash = bcrypt.hashSync(pepper, saltRounds);
+  console.log('Salt', saltRounds, 'pepper', pepper, 'Password hash', hash);
+  return hash;
+};

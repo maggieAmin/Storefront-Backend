@@ -33,36 +33,27 @@ describe('User Model', () => {
   it('create method should add a user', async () => {
     const result = await store.create({
       id:1,
-      firstname: 'Maggie',
-      lastname: 'Amin',
+      firstname: 'Black',
+      lastname: 'Widow',
       password: 'secret-password-hash',
     });
-    expect(result).toEqual({
-      id: 1,
-      firstname: 'Maggie',
-      lastname: 'Amin',
-      password: 'secret-password-hash',
-    });
+    expect(result.firstname).toEqual('Black');
+    expect(result.lastname).toEqual('Widow');
+    expect(result.password).not.toEqual('secret-password-hash');
   });
 
   it('index method should return a list of users', async () => {
     const result = await store.index();
-    expect(result).toEqual([{
-      id: 1 ,
-      firstname: 'Maggie',
-      lastname: 'Amin' ,
-      password: 'secret-password-hash' ,
-    }]);
+    expect(result[0].firstname).toEqual('Black');
+    expect(result[0].lastname).toEqual('Widow');
+    expect(result[0].password).not.toEqual('secret-password-hash');
  });
 
  it('show method should return the correct user', async () => {
   const result = await store.show("1");
-  expect(result).toEqual({
-    id: 1,
-    firstname: 'Maggie',
-    lastname: 'Amin' ,
-    password: 'secret-password-hash' ,
-    });
+  expect(result.firstname).toEqual('Black');
+  expect(result.lastname).toEqual('Widow');
+  expect(result.password).not.toEqual('secret-password-hash');
   });
 
   it('delete method should remove the user', async () => {

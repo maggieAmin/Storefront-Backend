@@ -12,12 +12,12 @@ These are the notes from a meeting with the frontend developer that describe wha
 - [OPTIONAL] Products by category (args: product category)
 
 #### Users
-- Index [token required] -> `GET /users/` **required**: JWToken: (user role:admin)
-- Show (args: id)[token required] -> `GET /users/:id` **required**: JWToken: (user:id role:admin)
-- Create (args: User)[token required] -> `POST /users/` **required**: JWToken: (user role:admin/user)
+- Index [token required] -> `GET /users/` **required**: JWToken
+- Show (args: id)[token required] -> `GET /users/:id` **required**: JWToken
+- Create (args: User)[token required] -> `POST /users/` **required**: JWToken
 
 #### Orders
-- Current Order by user (args: user id)[token required] -> `GET /orders/:user_id` **required**: JWToken: (user:id role:admin)
+- Current Order by user (args: user id)[token required] -> `GET /orders/:user_id` **required**: JWToken
 - [OPTIONAL] Completed Orders by user (args: user id)[token required]
 
 ## Data Shapes
