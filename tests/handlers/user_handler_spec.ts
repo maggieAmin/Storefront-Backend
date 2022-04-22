@@ -43,4 +43,40 @@ describe('User Handler', () => {
         await userStore.delete(20);
         done();
     });
+
+    it('should login for user with id', async(done) => {
+        const user = await userStore.create ({
+            id:20,
+            firstname: "Captain",
+            lastname: "America",
+            password: "password456"
+        })
+        const response = await (await request.post('/users/login').send({
+            id:"20",
+            password: "password456"
+        }));
+        expect(response.status).toBe(200);
+        expect(response.body.firstname).toEqual("Captain");
+        expect(response.body.lastname).toEqual("America");
+        expect(response.body.token).toBeDefined();
+        await userStore.delete(20);
+        done();
+    });
+
+    it('should NOT login for user with id but wrong password', async(done) => {
+        const user = await userStore.create ({
+            id:20,
+            firstname: "Captain",
+            lastname: "America",
+            password: "password456"
+        })
+        const response = await (await request.post('/users/login').send({
+            id:"20",
+            password: "password789"
+        }));
+        expect(response.status).toBe(401);
+        expect(response.body).toEqual("Invalid credentials");
+        await userStore.delete(20);
+        done();
+    });
 });
