@@ -95,21 +95,19 @@ export class UserStore {
     }
   }
 
-  async authenticate(username: string, password: string): Promise<User | null> {
+  async authenticate(id: string, password: string): Promise<User | null> {
     // @ts-ignore
     const conn = await Client.connect();
-    const sql = 'SELECT password_digest FROM users WHERE username=($1)';
+    const sql = 'SELECT password FROM users WHERE id=($1)';
 
-    const result = await conn.query(sql, [username]);
+    const result = await conn.query(sql, [id]);
     const pepper = process.env.BCRYPT_PASSWORD;
 
     if (result.rows.length) {
       const user = result.rows[0];
 
-      console.log(user);
-
-      if (bcrypt.compareSync(password + pepper, user.password_digest)) {
-        return user;
+      if (bcrypt.compareSync(password + pepper, user.password)) {
+        return this.show(id);
       }
     }
 

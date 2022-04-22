@@ -49,11 +49,22 @@ describe('User Model', () => {
     expect(result[0].password).not.toEqual('secret-password-hash');
  });
 
- it('show method should return the correct user', async () => {
-  const result = await store.show("1");
-  expect(result.firstname).toEqual('Black');
-  expect(result.lastname).toEqual('Widow');
-  expect(result.password).not.toEqual('secret-password-hash');
+  it('show method should return the correct user', async () => {
+    const result = await store.show("1");
+    expect(result.firstname).toEqual('Black');
+    expect(result.lastname).toEqual('Widow');
+    expect(result.password).not.toEqual('secret-password-hash');
+  });
+
+  it('show method should verify the correct user auth', async () => {
+    const result = await store.authenticate("1", 'secret-password-hash');
+    expect(result?.firstname).toEqual('Black');
+    expect(result?.lastname).toEqual('Widow');
+  });
+
+  it('show method should verify the correct user auth', async () => {
+    const result = await store.authenticate("1", 'not-so-secret');
+    expect(result).toBeNull();
   });
 
   it('delete method should remove the user', async () => {
