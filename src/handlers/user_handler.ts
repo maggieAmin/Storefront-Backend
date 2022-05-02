@@ -6,13 +6,18 @@ const userStore = new UserStore();
 
 const index = async (req: Request, res: Response) => {
   console.log('Request for users index');
-  if (!verifyToken(req.body.token)) {
-    res.status(401);
-    res.json('JWT Token missing');
-    return;
+  try {
+    if (!verifyToken(req.body.token)) {
+      res.status(401);
+      res.json('JWT Token missing');
+      return;
+    }
+    const users = await userStore.index();
+    res.json(users);
+  } catch (err) {
+    res.status(500);
+    res.json(err);
   }
-  const users = await userStore.index();
-  res.json(users);
 };
 
 const show = async (req: Request, res: Response) => {
@@ -28,11 +33,6 @@ const show = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
   console.log('Request to add user');
-  if (!verifyToken(req.body.token)) {
-    res.status(401);
-    res.json('JWT Token missing');
-    return;
-  }
   try {
     const user: User = {
       firstname: req.body.firstname,

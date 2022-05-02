@@ -12,8 +12,13 @@ const index = async (req: Request, res: Response) => {
 
 const show = async (req: Request, res: Response) => {
   console.log('Request for products with id', req.params.id);
-  const product = await productStore.show(req.params.id);
-  res.json(product);
+  try {
+    const product = await productStore.show(req.params.id);
+    res.json(product);
+  } catch (err) {
+    res.status(500);
+    res.json(err);
+  }
 };
 
 const create = async (req: Request, res: Response) => {

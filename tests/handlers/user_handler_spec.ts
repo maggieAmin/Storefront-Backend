@@ -35,18 +35,7 @@ describe('User Handler', () => {
         await userStore.delete(response.body.id);
         done();
     });
-    it('should NOT POST user if token missing', async(done) => {
-        const response = await request.post('/users/').send({
-            "id": 20,
-            "firstname": "Captain",
-            "lastname": "America",
-            "password": "password456"
-        });
-        expect(response.status).toBe(401);
-        await userStore.delete(response.body.id);
-        done();
-    });
-
+    
     it('should SHOW user with id', async(done) => {
         const user = await userStore.create ({
             id:20,
